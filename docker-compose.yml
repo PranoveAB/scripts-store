@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  script-store:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./scripts-store:/opt/scripts-store
+      - ./logs:/opt/logs
+    environment:
+      - PYTHONPATH=/opt
+    restart: unless-stopped

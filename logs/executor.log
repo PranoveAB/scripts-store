@@ -1,0 +1,148 @@
+2025-01-11 21:17:00.092 | INFO     | execute: Executing script signal_python from project signal
+2025-01-11 21:17:00.185 | INFO     | execute: Main script path: /opt/scripts-store/signal/signal_python/main.py
+2025-01-11 21:17:00.185 | INFO     | execute: Configuring Poetry environment
+2025-01-11 21:17:01.779 | INFO     | execute: Installing dependencies for signal_python
+2025-01-11 21:17:04.553 | DEBUG    | execute: Poetry install output: Updating dependencies
+Resolving dependencies...
+
+No dependencies to install or update
+
+Writing lock file
+
+2025-01-11 21:17:10.287 | INFO     | execute: Updated script status: success
+2025-01-11 21:18:00.166 | INFO     | execute: Executing script signal_python from project signal
+2025-01-11 21:18:00.208 | INFO     | execute: Main script path: /opt/scripts-store/signal/signal_python/main.py
+2025-01-11 21:18:00.209 | INFO     | execute: Configuring Poetry environment
+2025-01-11 21:18:01.263 | INFO     | execute: Installing dependencies for signal_python
+2025-01-11 21:18:02.388 | DEBUG    | execute: Poetry install output: Installing dependencies from lock file
+
+No dependencies to install or update
+
+2025-01-11 21:18:03.508 | INFO     | execute: Updated script status: success
+2025-01-11 21:19:00.029 | INFO     | execute: Executing script signal_python from project signal
+2025-01-11 21:19:00.059 | INFO     | execute: Main script path: /opt/scripts-store/signal/signal_python/main.py
+2025-01-11 21:19:00.060 | INFO     | execute: Configuring Poetry environment
+2025-01-11 21:19:01.168 | INFO     | execute: Installing dependencies for signal_python
+2025-01-11 21:19:02.333 | DEBUG    | execute: Poetry install output: Installing dependencies from lock file
+
+No dependencies to install or update
+
+2025-01-11 21:19:03.453 | INFO     | execute: Updated script status: success
+2025-01-11 21:20:00.039 | INFO     | execute: Executing script signal_python from project signal
+2025-01-11 21:20:00.067 | INFO     | execute: Main script path: /opt/scripts-store/signal/signal_python/main.py
+2025-01-11 21:20:00.067 | INFO     | execute: Configuring Poetry environment
+2025-01-11 21:20:01.025 | INFO     | execute: Installing dependencies for signal_python
+2025-01-11 21:20:02.236 | DEBUG    | execute: Poetry install output: Installing dependencies from lock file
+
+No dependencies to install or update
+
+2025-01-11 21:20:03.287 | INFO     | execute: Updated script status: success
+2025-01-11 21:21:00.169 | INFO     | execute: Executing script signal_python from project signal
+2025-01-11 21:21:00.253 | INFO     | execute: Main script path: /opt/scripts-store/signal/signal_python/main.py
+2025-01-11 21:21:00.254 | INFO     | execute: Configuring Poetry environment
+2025-01-11 21:21:01.440 | INFO     | execute: Installing dependencies for signal_python
+2025-01-11 21:21:02.768 | DEBUG    | execute: Poetry install output: Installing dependencies from lock file
+
+No dependencies to install or update
+
+2025-01-11 21:21:03.995 | INFO     | execute: Updated script status: success
+2025-01-11 21:22:00.029 | INFO     | execute: Executing script signal_python from project signal
+2025-01-11 21:22:00.048 | INFO     | execute: Main script path: /opt/scripts-store/signal/signal_python/main.py
+2025-01-11 21:22:00.048 | INFO     | execute: Configuring Poetry environment
+2025-01-11 21:22:00.715 | INFO     | execute: Installing dependencies for signal_python
+2025-01-11 21:22:01.903 | DEBUG    | execute: Poetry install output: Installing dependencies from lock file
+
+No dependencies to install or update
+
+2025-01-11 21:22:02.892 | INFO     | execute: Updated script status: success
+2025-01-11 21:23:00.142 | INFO     | execute: Executing script signal_python from project signal
+2025-01-11 21:23:00.166 | INFO     | execute: Main script path: /opt/scripts-store/signal/signal_python/main.py
+2025-01-11 21:23:00.166 | INFO     | execute: Configuring Poetry environment
+2025-01-11 21:23:00.910 | INFO     | execute: Installing dependencies for signal_python
+2025-01-11 21:23:02.044 | DEBUG    | execute: Poetry install output: Installing dependencies from lock file
+
+No dependencies to install or update
+
+2025-01-11 21:23:03.128 | INFO     | execute: Updated script status: success
+2025-01-11 21:24:00.079 | INFO     | execute: Executing script signal_python from project signal
+2025-01-11 21:24:00.112 | INFO     | execute: Main script path: /opt/scripts-store/signal/signal_python/main.py
+2025-01-11 21:24:00.113 | INFO     | execute: Configuring Poetry environment
+2025-01-11 21:24:01.038 | INFO     | execute: Installing dependencies for signal_python
+2025-01-11 21:24:02.543 | DEBUG    | execute: Poetry install output: Installing dependencies from lock file
+
+No dependencies to install or update
+
+2025-01-11 21:24:04.115 | INFO     | execute: Updated script status: success
+2025-01-11 21:25:00.014 | INFO     | execute: Executing script signal_python from project signal
+2025-01-11 21:25:00.034 | INFO     | execute: Main script path: /opt/scripts-store/signal/signal_python/main.py
+2025-01-11 21:25:00.034 | INFO     | execute: Configuring Poetry environment
+2025-01-11 21:25:00.664 | INFO     | execute: Installing dependencies for signal_python
+2025-01-11 21:25:01.998 | DEBUG    | execute: Poetry install output: Installing dependencies from lock file
+
+No dependencies to install or update
+
+2025-01-11 21:25:03.125 | INFO     | execute: Updated script status: success
+2025-01-11 21:26:00.128 | INFO     | execute: Executing script signal_python from project signal
+2025-01-11 21:26:00.169 | INFO     | execute: Main script path: /opt/scripts-store/signal/signal_python/main.py
+2025-01-11 21:26:00.170 | INFO     | execute: Configuring Poetry environment
+2025-01-11 21:26:01.006 | INFO     | execute: Installing dependencies for signal_python
+2025-01-11 21:26:02.477 | DEBUG    | execute: Poetry install output: Installing dependencies from lock file
+
+No dependencies to install or update
+
+2025-01-11 21:26:03.727 | INFO     | execute: Updated script status: success
+2025-01-11 21:27:00.075 | INFO     | execute: Executing script signal_python from project signal
+2025-01-11 21:27:00.113 | INFO     | execute: Main script path: /opt/scripts-store/signal/signal_python/main.py
+2025-01-11 21:27:00.114 | INFO     | execute: Configuring Poetry environment
+2025-01-11 21:27:01.247 | INFO     | execute: Installing dependencies for signal_python
+2025-01-11 21:27:02.514 | DEBUG    | execute: Poetry install output: Installing dependencies from lock file
+
+No dependencies to install or update
+
+2025-01-11 21:27:03.626 | INFO     | execute: Updated script status: success
+2025-01-11 21:28:00.030 | INFO     | execute: Executing script signal_python from project signal
+2025-01-11 21:28:00.055 | INFO     | execute: Main script path: /opt/scripts-store/signal/signal_python/main.py
+2025-01-11 21:28:00.057 | INFO     | execute: Configuring Poetry environment
+2025-01-11 21:28:01.630 | INFO     | execute: Installing dependencies for signal_python
+2025-01-11 21:28:03.902 | DEBUG    | execute: Poetry install output: Installing dependencies from lock file
+
+No dependencies to install or update
+
+2025-01-11 21:28:06.133 | INFO     | execute: Updated script status: success
+2025-01-11 21:29:00.106 | INFO     | execute: Executing script signal_python from project signal
+2025-01-11 21:29:00.147 | INFO     | execute: Main script path: /opt/scripts-store/signal/signal_python/main.py
+2025-01-11 21:29:00.152 | INFO     | execute: Configuring Poetry environment
+2025-01-11 21:29:01.099 | INFO     | execute: Installing dependencies for signal_python
+2025-01-11 21:29:02.286 | DEBUG    | execute: Poetry install output: Installing dependencies from lock file
+
+No dependencies to install or update
+
+2025-01-11 21:29:03.724 | INFO     | execute: Updated script status: success
+2025-01-11 21:38:24.927 | INFO     | execute: Executing script signal_python from project signal
+2025-01-11 21:38:24.947 | INFO     | execute: Main script path: /opt/scripts-store/signal/signal_python/main.py
+2025-01-11 21:38:24.949 | ERROR    | execute: Error executing script: Main script not found at /opt/scripts-store/signal/signal_python/main.py
+2025-01-11 21:46:00.451 | INFO     | execute: Executing script signal_python from project signal
+2025-01-11 21:46:00.628 | INFO     | execute: Main script path: /opt/scripts-store/signal/signal_python/main.py
+2025-01-11 21:46:00.629 | INFO     | execute: Installing dependencies
+2025-01-11 21:46:04.851 | INFO     | execute: Created virtualenv: signal-signal_python-68748882-py3.9
+2025-01-11 21:46:06.563 | INFO     | execute: Updated script status: success
+2025-01-11 21:47:00.086 | INFO     | execute: Executing script signal_python from project signal
+2025-01-11 21:47:00.115 | INFO     | execute: Main script path: /opt/scripts-store/signal/signal_python/main.py
+2025-01-11 21:47:00.118 | INFO     | execute: Installing dependencies
+2025-01-11 21:47:01.768 | INFO     | execute: Created virtualenv: signal-signal_python-68748882-py3.9
+2025-01-11 21:47:02.868 | INFO     | execute: Updated script status: success
+2025-01-11 21:48:00.003 | INFO     | execute: Executing script signal_python from project signal
+2025-01-11 21:48:00.016 | INFO     | execute: Main script path: /opt/scripts-store/signal/signal_python/main.py
+2025-01-11 21:48:00.017 | INFO     | execute: Installing dependencies
+2025-01-11 21:48:01.290 | INFO     | execute: Created virtualenv: signal-signal_python-68748882-py3.9
+2025-01-11 21:48:02.343 | INFO     | execute: Updated script status: success
+2025-01-11 21:49:00.129 | INFO     | execute: Executing script signal_python from project signal
+2025-01-11 21:49:00.209 | INFO     | execute: Main script path: /opt/scripts-store/signal/signal_python/main.py
+2025-01-11 21:49:00.212 | INFO     | execute: Installing dependencies
+2025-01-11 21:49:04.260 | INFO     | execute: Created virtualenv: signal-signal_python-68748882-py3.9
+2025-01-11 21:49:06.067 | INFO     | execute: Updated script status: success
+2025-01-11 21:50:00.089 | INFO     | execute: Executing script signal_python from project signal
+2025-01-11 21:50:00.129 | INFO     | execute: Main script path: /opt/scripts-store/signal/signal_python/main.py
+2025-01-11 21:50:00.129 | INFO     | execute: Installing dependencies
+2025-01-11 21:50:01.356 | INFO     | execute: Created virtualenv: signal-signal_python-68748882-py3.9
+2025-01-11 21:50:02.576 | INFO     | execute: Updated script status: success
