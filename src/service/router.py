@@ -10,6 +10,7 @@ import os
 import zipfile
 from loguru import logger
 import shutil
+from src.utils.validator import ScriptValidator
 from croniter import croniter
 
 router = APIRouter()
@@ -24,13 +25,18 @@ async def upload_script(
 ):
     """
     Upload a script package.
-    Requires a zip file containing pyproject.toml and required structure.
+    Package must contain:
+    - pyproject.toml with valid configuration
+    - main.py
+    - config/ directory
+    - tests/ directory with passing tests
     """
+    extract_dir = None
     try:
         if not file.filename.endswith('.zip'):
             raise HTTPException(
                 status_code=400,
-                detail="Only zip files are accepted. Package must contain pyproject.toml and required structure."
+                detail="Only zip files are accepted"
             )
 
         # Create project directory
@@ -55,20 +61,22 @@ async def upload_script(
         
         # Remove zip file after extraction
         os.remove(zip_path)
+
+        # Validate script
+        validator = ScriptValidator(project_name, script_name)
+        is_valid, message = validator.validate_all()
         
-        # Validate package structure
-        if not os.path.exists(os.path.join(extract_dir, 'pyproject.toml')):
-            shutil.rmtree(extract_dir)
-            raise HTTPException(status_code=400, detail="Missing pyproject.toml")
-            
-        if not os.path.exists(os.path.join(extract_dir, 'main.py')):
-            shutil.rmtree(extract_dir)
-            raise HTTPException(status_code=400, detail="Missing main.py")
-            
-        if not os.path.exists(os.path.join(extract_dir, 'config')):
-            shutil.rmtree(extract_dir)
-            raise HTTPException(status_code=400, detail="Missing config directory")
-        
+        if not is_valid:
+            if extract_dir and os.path.exists(extract_dir):
+                shutil.rmtree(extract_dir)
+            raise HTTPException(
+                status_code=400,
+                detail=f"Validation failed: {message}"
+            )
+
+        # If we get here, validation passed
+        logger.info(f"Validation passed for {script_name}")
+
         # Handle versioning
         existing_script = db.query(Script).filter(
             Script.project_name == project_name,
@@ -111,13 +119,16 @@ async def upload_script(
         logger.info(f"Successfully uploaded {script_name} version {new_version} to {project_name}")
         return {
             "status": "success",
-            "message": f"Script uploaded successfully",
+            "message": f"Script uploaded and validated successfully",
             "version": new_version
         }
 
-    except HTTPException as he:
-        raise he
+    except HTTPException:
+        raise
     except Exception as e:
+        # Clean up on error
+        if extract_dir and os.path.exists(extract_dir):
+            shutil.rmtree(extract_dir)
         logger.error(f"Error uploading script: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 

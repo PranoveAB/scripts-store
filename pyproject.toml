@@ -18,6 +18,7 @@ apscheduler = "^3.10.4"
 croniter = "^2.0.1"
 python-dotenv = "^1.0.0"
 azure-storage-blob = "^12.19.0"
+toml = "^0.10.2"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.3"
