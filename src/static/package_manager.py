@@ -37,26 +37,37 @@ class PackageManager:
         """Set up Poetry virtual environment"""
         try:
             if not os.path.exists(os.path.join(self.script_path, 'pyproject.toml')):
+                self.log.error("pyproject.toml not found")
                 raise Exception("pyproject.toml not found")
 
             # Verify Poetry configuration
-            subprocess.run(
+            config_result = subprocess.run(
                 ['poetry', 'config', 'virtualenvs.path', self.POETRY_VENV_PATH],
-                cwd=self.script_path,
-                check=True
-            )
-
-            # Install dependencies
-            self.log.info(f"Installing dependencies in {self.script_path}")
-            result = subprocess.run(
-                ['poetry', 'install', '--no-root'],
                 cwd=self.script_path,
                 capture_output=True,
                 text=True,
                 check=True
             )
-            
-            self.log.info(f"Poetry install output: {result.stdout}")
+            self.log.info(f"Poetry virtualenvs.path set to {self.POETRY_VENV_PATH}")
+
+            # Check if we already have an active environment
+            active_env = self.get_active_env_name()
+            if active_env:
+                self.log.info(f"Using existing environment: {active_env}")
+                return True
+
+            # Install dependencies if needed
+            if not os.path.exists(os.path.join(self.script_path, 'poetry.lock')):
+                self.log.info("No poetry.lock file found, installing dependencies")
+                result = subprocess.run(
+                    ['poetry', 'install', '--no-root'],
+                    cwd=self.script_path,
+                    capture_output=True,
+                    text=True,
+                    check=True
+                )
+                self.log.info(f"Poetry install output: {result.stdout}")
+
             return True
 
         except subprocess.CalledProcessError as e:

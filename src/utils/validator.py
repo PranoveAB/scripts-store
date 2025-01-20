@@ -21,14 +21,17 @@ class ScriptValidator:
                 dir_path = os.path.join(self.script_path, dir_name)
                 if not os.path.isdir(dir_path):
                     return False, f"Missing required directory: {dir_name}"
-
+            logger.bind(log_type="execute").info(f"Required directories exist for {self.project_name}/{self.script_name}")
+            
             # Check required files
             required_files = ['pyproject.toml', 'main.py']
             for file_name in required_files:
                 file_path = os.path.join(self.script_path, file_name)
                 if not os.path.isfile(file_path):
                     return False, f"Missing required file: {file_name}"
+            logger.bind(log_type="execute").info(f"Required files exist for {self.project_name}/{self.script_name}")
 
+            logger.bind(log_type="execute").info(f"Structure validation passed for {self.project_name}/{self.script_name}")
             return True, "Structure validation passed"
         except Exception as e:
             return False, f"Structure validation error: {str(e)}"
@@ -57,6 +60,7 @@ class ScriptValidator:
 
             # Verify Python version
             if 'python' not in config['tool']['poetry']['dependencies']:
+                logger.bind(log_type="execute").info("Missing Python version in dependencies")
                 return False, "Missing Python version in dependencies"
 
             return True, "pyproject.toml validation passed"

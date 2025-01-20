@@ -21,8 +21,8 @@ def execute_scheduled_script(script_name: str, project_name: str):
         log.info(f"Completed scheduled execution of {script_name}")
     except Exception as e:
         log.error(f"Failed scheduled execution of {script_name}: {str(e)}")
-    finally:
-        executor.cleanup()
+    # finally:
+    #     executor.cleanup()
 
 class ScriptScheduler:
     def __init__(self):

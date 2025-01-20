@@ -54,7 +54,7 @@ async def upload_script(
             # Clean up old version's environment
             old_package_manager = PackageManager(project_name, script_name)
             old_package_manager.cleanup_environment()
-            log.info(f"Cleaned up environment for old version: {existing_script.version}")
+            logger.bind(log_type="execute").info(f"Cleaned up old version of {script_name} in {project_name}")
 
         # Clean up existing directory if it exists
         if os.path.exists(extract_dir):
@@ -67,10 +67,12 @@ async def upload_script(
         # Extract zip
         with zipfile.ZipFile(zip_path, 'r') as zip_ref:
             zip_ref.extractall(extract_dir)
+        logger.bind(log_type="execute").info(f"Extracted {file.filename} to {extract_dir}")
         
         # Remove zip file after extraction
         os.remove(zip_path)
 
+        logger.bind(log_type="execute").info(f"Validating {script_name} in {project_name}")
         # Validate script
         validator = ScriptValidator(project_name, script_name)
         is_valid, message = validator.validate_all()
@@ -86,12 +88,14 @@ async def upload_script(
         # Handle versioning
         if existing_script:
             # Increment version
+            logger.bind(log_type="execute").info(f"Found existing version of {script_name} in {project_name}, incrementing version")
             version_parts = existing_script.version.split('.')
             new_version = f"{version_parts[0]}.{version_parts[1]}.{int(version_parts[2]) + 1}"
             
             # Deactivate old version
             existing_script.is_active = False
             db.add(existing_script)
+            logger.bind(log_type="execute").info(f"Deactivated old version of {script_name} in {project_name}, new version is {new_version}")
         else:
             new_version = "1.0.0"
 
@@ -103,12 +107,15 @@ async def upload_script(
             is_active=True,
             created_at=datetime.utcnow()
         )
+        logger.bind(log_type="execute").info(f"Created record for {script_name} in {project_name}")
 
         # Add cron expression if provided
         if cron_expression:
+            logger.bind(log_type="execute").info(f"Found cron expression: {cron_expression}, validating")
             if not croniter.is_valid(cron_expression):
                 raise HTTPException(status_code=400, detail="Invalid cron expression")
             new_script.cron_expression = cron_expression
+            logger.bind(log_type="execute").info(f"Validated cron expression: {cron_expression}")
 
         db.add(new_script)
         db.commit()
@@ -116,8 +123,9 @@ async def upload_script(
         # Schedule the script if cron expression provided
         if cron_expression:
             scheduler.schedule_script(script_name, project_name, cron_expression)
+            logger.bind(log_type="execute").info(f"Script scheduled with cron expression: {cron_expression}")
 
-        log.info(f"Successfully uploaded {script_name} version {new_version} to {project_name}")
+        logger.bind(log_type="execute").info(f"Script uploaded successfully: {script_name} in {project_name}")
         return {
             "status": "success",
             "message": f"Script uploaded successfully",
@@ -130,7 +138,7 @@ async def upload_script(
         # Clean up on error
         if extract_dir and os.path.exists(extract_dir):
             shutil.rmtree(extract_dir)
-        log.error(f"Error uploading script: {str(e)}")
+        logger.bind(log_type="execute").error(f"Error uploading script: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/scripts/{script_name}/run")
