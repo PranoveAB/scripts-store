@@ -2,21 +2,23 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-import os
 
-# Use SQLite for persistence
+# SQLite database URL
 SQLALCHEMY_DATABASE_URL = "sqlite:///./scripts.db"
 
+# Create SQLAlchemy engine
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL,
     connect_args={"check_same_thread": False}  # Needed for SQLite
 )
 
+# Create SessionLocal class for database sessions
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
+# Create Base class for database models
 Base = declarative_base()
 
-# Dependency for FastAPI
+# Dependency to get database session
 def get_db():
     db = SessionLocal()
     try:

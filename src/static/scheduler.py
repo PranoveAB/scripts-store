@@ -12,44 +12,54 @@ def execute_scheduled_script(script_name: str, project_name: str):
     Global function for script execution that APScheduler can serialize.
     This will be called by the scheduler.
     """
+    log = logger.bind(log_type="schedule")
+    log.info(f"Starting scheduled execution of {script_name}")
+    
     executor = ScriptExecutor(script_name, project_name)
     try:
         executor.execute()
+        log.info(f"Completed scheduled execution of {script_name}")
+    except Exception as e:
+        log.error(f"Failed scheduled execution of {script_name}: {str(e)}")
     finally:
         executor.cleanup()
 
 class ScriptScheduler:
     def __init__(self):
+        # Initialize scheduler with SQLite job store for persistence
         self.scheduler = BackgroundScheduler()
         self.scheduler.add_jobstore('sqlalchemy', url='sqlite:///jobs.sqlite')
+        self.log = logger.bind(log_type="schedule")
 
     def start(self):
         """Start the scheduler and restore any existing jobs"""
         if not self.scheduler.running:
             self.scheduler.start()
             self._restore_jobs()
-            logger.info("Scheduler started and jobs restored")
+            self.log.info("Scheduler started")
 
     def stop(self):
         """Stop the scheduler"""
         if self.scheduler.running:
             self.scheduler.shutdown()
-            logger.info("Scheduler stopped")
+            self.log.info("Scheduler stopped")
 
     def schedule_script(self, script_name: str, project_name: str, cron_expression: str):
         """Schedule a script to run on a cron schedule"""
         try:
             job_id = f"{project_name}_{script_name}"
+            self.log.info(f"Scheduling {script_name} with cron: {cron_expression}")
 
             # Remove existing job if it exists
             if job_id in [job.id for job in self.scheduler.get_jobs()]:
                 self.scheduler.remove_job(job_id)
+                self.log.info(f"Removed existing job for {script_name}")
 
-            # Add new job using the global function
+            # Add new job
             trigger = CronTrigger.from_crontab(cron_expression)
             
             self.scheduler.add_job(
-                execute_scheduled_script,  # Using the global function
+                execute_scheduled_script,
                 trigger=trigger,
                 args=[script_name, project_name],
                 id=job_id,
@@ -58,11 +68,11 @@ class ScriptScheduler:
                 misfire_grace_time=None  # Allow misfired jobs to run immediately
             )
 
-            logger.info(f"Scheduled script {script_name} with cron: {cron_expression}")
+            self.log.info(f"Successfully scheduled {script_name}")
             return True
 
         except Exception as e:
-            logger.error(f"Error scheduling script: {str(e)}")
+            self.log.error(f"Error scheduling {script_name}: {str(e)}")
             raise
 
     def _restore_jobs(self):
@@ -83,12 +93,12 @@ class ScriptScheduler:
                         script.cron_expression
                     )
                 except Exception as e:
-                    logger.error(f"Error restoring job for {script.script_name}: {str(e)}")
+                    self.log.error(f"Error restoring job for {script.script_name}: {str(e)}")
 
-            logger.info(f"Restored {len(active_scripts)} scheduled jobs")
+            self.log.info(f"Restored {len(active_scripts)} scheduled jobs")
 
         except Exception as e:
-            logger.error(f"Error restoring jobs: {str(e)}")
+            self.log.error(f"Error restoring jobs: {str(e)}")
         finally:
             db.close()
 

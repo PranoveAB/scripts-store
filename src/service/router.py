@@ -5,12 +5,13 @@ from src.database.db import get_db
 from src.service.models.db_model import Script
 from src.static.executor import ScriptExecutor
 from src.static.scheduler import scheduler
+from src.static.package_manager import PackageManager
+from src.utils.validator import ScriptValidator
 from datetime import datetime
 import os
 import zipfile
 from loguru import logger
 import shutil
-from src.utils.validator import ScriptValidator
 from croniter import croniter
 
 router = APIRouter()
@@ -23,15 +24,10 @@ async def upload_script(
     cron_expression: str = Form(None),
     db: Session = Depends(get_db)
 ):
-    """
-    Upload a script package.
-    Package must contain:
-    - pyproject.toml with valid configuration
-    - main.py
-    - config/ directory
-    - tests/ directory with passing tests
-    """
+    """Upload a script package"""
     extract_dir = None
+    log = logger.bind(log_type="execute")
+    
     try:
         if not file.filename.endswith('.zip'):
             raise HTTPException(
@@ -47,6 +43,19 @@ async def upload_script(
         zip_path = os.path.join(project_dir, file.filename)
         extract_dir = os.path.join(project_dir, script_name)
         
+        # Handle existing version cleanup before extraction
+        existing_script = db.query(Script).filter(
+            Script.project_name == project_name,
+            Script.script_name == script_name,
+            Script.is_active == True
+        ).first()
+
+        if existing_script:
+            # Clean up old version's environment
+            old_package_manager = PackageManager(project_name, script_name)
+            old_package_manager.cleanup_environment()
+            log.info(f"Cleaned up environment for old version: {existing_script.version}")
+
         # Clean up existing directory if it exists
         if os.path.exists(extract_dir):
             shutil.rmtree(extract_dir)
@@ -74,15 +83,7 @@ async def upload_script(
                 detail=f"Validation failed: {message}"
             )
 
-        # If we get here, validation passed
-        logger.info(f"Validation passed for {script_name}")
-
         # Handle versioning
-        existing_script = db.query(Script).filter(
-            Script.project_name == project_name,
-            Script.script_name == script_name
-        ).first()
-
         if existing_script:
             # Increment version
             version_parts = existing_script.version.split('.')
@@ -116,10 +117,10 @@ async def upload_script(
         if cron_expression:
             scheduler.schedule_script(script_name, project_name, cron_expression)
 
-        logger.info(f"Successfully uploaded {script_name} version {new_version} to {project_name}")
+        log.info(f"Successfully uploaded {script_name} version {new_version} to {project_name}")
         return {
             "status": "success",
-            "message": f"Script uploaded and validated successfully",
+            "message": f"Script uploaded successfully",
             "version": new_version
         }
 
@@ -129,7 +130,7 @@ async def upload_script(
         # Clean up on error
         if extract_dir and os.path.exists(extract_dir):
             shutil.rmtree(extract_dir)
-        logger.error(f"Error uploading script: {str(e)}")
+        log.error(f"Error uploading script: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/scripts/{script_name}/run")
@@ -156,13 +157,13 @@ async def run_script(
         try:
             result = executor.execute(params)
             return result
-        finally:
-            executor.cleanup()
+        except Exception as e:
+            raise e
 
-    except HTTPException as he:
-        raise he
+    except HTTPException:
+        raise
     except Exception as e:
-        logger.error(f"Error running script: {str(e)}")
+        logger.bind(log_type="execute").error(f"Error running script: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/scripts/{script_name}/schedule")
@@ -200,10 +201,10 @@ async def schedule_script_endpoint(
             "message": f"Script scheduled with cron expression: {cron_expression}"
         }
         
-    except HTTPException as he:
-        raise he
+    except HTTPException:
+        raise
     except Exception as e:
-        logger.error(f"Error scheduling script: {str(e)}")
+        logger.bind(log_type="schedule").error(f"Error scheduling script: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/scripts")
