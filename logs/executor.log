@@ -1,0 +1,193 @@
+2025-01-20 17:29:26.184 | INFO     | execute: Successfully uploaded weather version 1.0.0 to weather-python
+2025-01-20 17:30:00.050 | INFO     | execute: Executing script weather from project weather-python
+2025-01-20 17:30:00.055 | INFO     | execute: Main script path: /opt/scripts-store/weather-python/weather/main.py
+2025-01-20 17:30:02.098 | INFO     | execute: Installing dependencies in /opt/scripts-store/weather-python/weather
+2025-01-20 17:31:23.723 | INFO     | execute: Poetry install output: Updating dependencies
+Resolving dependencies...
+
+Package operations: 26 installs, 0 updates, 0 removals
+
+  • Installing numpy (2.0.2)
+  • Installing six (1.17.0)
+  • Installing zipp (3.21.0)
+  • Installing certifi (2024.12.14)
+  • Installing charset-normalizer (3.4.1)
+  • Installing contourpy (1.3.0)
+  • Installing cycler (0.12.1)
+  • Installing exceptiongroup (1.2.2)
+  • Installing fonttools (4.55.3)
+  • Installing idna (3.10)
+  • Installing importlib-resources (6.5.2)
+  • Installing iniconfig (2.0.0)
+  • Installing kiwisolver (1.4.7)
+  • Installing packaging (24.2)
+  • Installing pillow (11.1.0)
+  • Installing pluggy (1.5.0)
+  • Installing pyparsing (3.2.1)
+  • Installing python-dateutil (2.9.0.post0)
+  • Installing pytz (2024.2)
+  • Installing tomli (2.2.1)
+  • Installing tzdata (2024.2)
+  • Installing urllib3 (2.3.0)
+  • Installing matplotlib (3.9.4)
+  • Installing pandas (2.2.3)
+  • Installing pytest (7.4.4)
+  • Installing requests (2.32.3)
+
+Writing lock file
+
+2025-01-20 17:31:32.236 | INFO     | execute: Updated script status: success
+2025-01-20 17:31:32.237 | INFO     | execute: Script output:
+Weather Tracker Starting...
+This script uses matplotlib and pandas - different from signal project!
+Getting weather for Nairobi...
+Getting weather for New York...
+Getting weather for Tokyo...
+Weather Tracker Completed!
+
+2025-01-20 17:31:34.462 | INFO     | execute: Cleaned up environment: weather-python-F6vSbGNj-py3.9
+2025-01-20 17:31:34.463 | INFO     | execute: Removed poetry.lock file
+2025-01-20 17:32:00.026 | INFO     | execute: Executing script weather from project weather-python
+2025-01-20 17:32:00.026 | INFO     | execute: Main script path: /opt/scripts-store/weather-python/weather/main.py
+2025-01-20 17:32:00.541 | INFO     | execute: Installing dependencies in /opt/scripts-store/weather-python/weather
+2025-01-20 17:32:10.533 | INFO     | execute: Poetry install output: Updating dependencies
+Resolving dependencies...
+
+Package operations: 26 installs, 0 updates, 0 removals
+
+  • Installing numpy (2.0.2)
+  • Installing six (1.17.0)
+  • Installing zipp (3.21.0)
+  • Installing certifi (2024.12.14)
+  • Installing charset-normalizer (3.4.1)
+  • Installing contourpy (1.3.0)
+  • Installing cycler (0.12.1)
+  • Installing exceptiongroup (1.2.2)
+  • Installing fonttools (4.55.3)
+  • Installing idna (3.10)
+  • Installing importlib-resources (6.5.2)
+  • Installing iniconfig (2.0.0)
+  • Installing kiwisolver (1.4.7)
+  • Installing packaging (24.2)
+  • Installing pillow (11.1.0)
+  • Installing pluggy (1.5.0)
+  • Installing pyparsing (3.2.1)
+  • Installing python-dateutil (2.9.0.post0)
+  • Installing pytz (2024.2)
+  • Installing tomli (2.2.1)
+  • Installing tzdata (2024.2)
+  • Installing urllib3 (2.3.0)
+  • Installing matplotlib (3.9.4)
+  • Installing pandas (2.2.3)
+  • Installing pytest (7.4.4)
+  • Installing requests (2.32.3)
+
+Writing lock file
+
+2025-01-20 17:32:18.505 | INFO     | execute: Updated script status: success
+2025-01-20 17:32:18.506 | INFO     | execute: Script output:
+Weather Tracker Starting...
+This script uses matplotlib and pandas - different from signal project!
+Getting weather for Nairobi...
+Getting weather for New York...
+Getting weather for Tokyo...
+Weather Tracker Completed!
+
+2025-01-20 17:32:20.733 | INFO     | execute: Cleaned up environment: weather-python-F6vSbGNj-py3.9
+2025-01-20 17:32:20.734 | INFO     | execute: Removed poetry.lock file
+2025-01-20 17:33:00.043 | INFO     | execute: Executing script weather from project weather-python
+2025-01-20 17:33:00.044 | INFO     | execute: Main script path: /opt/scripts-store/weather-python/weather/main.py
+2025-01-20 17:33:01.333 | INFO     | execute: Installing dependencies in /opt/scripts-store/weather-python/weather
+2025-01-20 17:33:13.762 | INFO     | execute: Poetry install output: Updating dependencies
+Resolving dependencies...
+
+Package operations: 26 installs, 0 updates, 0 removals
+
+  • Installing numpy (2.0.2)
+  • Installing six (1.17.0)
+  • Installing zipp (3.21.0)
+  • Installing certifi (2024.12.14)
+  • Installing charset-normalizer (3.4.1)
+  • Installing contourpy (1.3.0)
+  • Installing cycler (0.12.1)
+  • Installing exceptiongroup (1.2.2)
+  • Installing fonttools (4.55.3)
+  • Installing idna (3.10)
+  • Installing importlib-resources (6.5.2)
+  • Installing iniconfig (2.0.0)
+  • Installing kiwisolver (1.4.7)
+  • Installing packaging (24.2)
+  • Installing pillow (11.1.0)
+  • Installing pluggy (1.5.0)
+  • Installing pyparsing (3.2.1)
+  • Installing python-dateutil (2.9.0.post0)
+  • Installing pytz (2024.2)
+  • Installing tomli (2.2.1)
+  • Installing tzdata (2024.2)
+  • Installing urllib3 (2.3.0)
+  • Installing matplotlib (3.9.4)
+  • Installing pandas (2.2.3)
+  • Installing pytest (7.4.4)
+  • Installing requests (2.32.3)
+
+Writing lock file
+
+2025-01-20 17:33:20.711 | INFO     | execute: Updated script status: success
+2025-01-20 17:33:20.712 | INFO     | execute: Script output:
+Weather Tracker Starting...
+This script uses matplotlib and pandas - different from signal project!
+Getting weather for Nairobi...
+Getting weather for New York...
+Getting weather for Tokyo...
+Weather Tracker Completed!
+
+2025-01-20 17:33:22.790 | INFO     | execute: Cleaned up environment: weather-python-F6vSbGNj-py3.9
+2025-01-20 17:33:22.790 | INFO     | execute: Removed poetry.lock file
+2025-01-20 17:34:00.026 | INFO     | execute: Executing script weather from project weather-python
+2025-01-20 17:34:00.026 | INFO     | execute: Main script path: /opt/scripts-store/weather-python/weather/main.py
+2025-01-20 17:34:00.560 | INFO     | execute: Installing dependencies in /opt/scripts-store/weather-python/weather
+2025-01-20 17:34:10.871 | INFO     | execute: Poetry install output: Updating dependencies
+Resolving dependencies...
+
+Package operations: 26 installs, 0 updates, 0 removals
+
+  • Installing numpy (2.0.2)
+  • Installing six (1.17.0)
+  • Installing zipp (3.21.0)
+  • Installing certifi (2024.12.14)
+  • Installing charset-normalizer (3.4.1)
+  • Installing contourpy (1.3.0)
+  • Installing cycler (0.12.1)
+  • Installing exceptiongroup (1.2.2)
+  • Installing fonttools (4.55.3)
+  • Installing idna (3.10)
+  • Installing importlib-resources (6.5.2)
+  • Installing iniconfig (2.0.0)
+  • Installing kiwisolver (1.4.7)
+  • Installing packaging (24.2)
+  • Installing pillow (11.1.0)
+  • Installing pluggy (1.5.0)
+  • Installing pyparsing (3.2.1)
+  • Installing python-dateutil (2.9.0.post0)
+  • Installing pytz (2024.2)
+  • Installing tomli (2.2.1)
+  • Installing tzdata (2024.2)
+  • Installing urllib3 (2.3.0)
+  • Installing matplotlib (3.9.4)
+  • Installing pandas (2.2.3)
+  • Installing pytest (7.4.4)
+  • Installing requests (2.32.3)
+
+Writing lock file
+
+2025-01-20 17:34:18.679 | INFO     | execute: Updated script status: success
+2025-01-20 17:34:18.680 | INFO     | execute: Script output:
+Weather Tracker Starting...
+This script uses matplotlib and pandas - different from signal project!
+Getting weather for Nairobi...
+Getting weather for New York...
+Getting weather for Tokyo...
+Weather Tracker Completed!
+
+2025-01-20 17:34:21.142 | INFO     | execute: Cleaned up environment: weather-python-F6vSbGNj-py3.9
+2025-01-20 17:34:21.142 | INFO     | execute: Removed poetry.lock file

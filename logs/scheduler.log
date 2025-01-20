@@ -1,0 +1,12 @@
+2025-01-20 17:25:44.097 | INFO     | schedule: Restored 0 scheduled jobs
+2025-01-20 17:25:44.099 | INFO     | schedule: Scheduler started
+2025-01-20 17:29:26.153 | INFO     | schedule: Scheduling weather with cron: * * * * *
+2025-01-20 17:29:26.182 | INFO     | schedule: Successfully scheduled weather
+2025-01-20 17:30:00.041 | INFO     | schedule: Starting scheduled execution of weather
+2025-01-20 17:31:32.238 | INFO     | schedule: Completed scheduled execution of weather
+2025-01-20 17:32:00.025 | INFO     | schedule: Starting scheduled execution of weather
+2025-01-20 17:32:18.506 | INFO     | schedule: Completed scheduled execution of weather
+2025-01-20 17:33:00.040 | INFO     | schedule: Starting scheduled execution of weather
+2025-01-20 17:33:20.712 | INFO     | schedule: Completed scheduled execution of weather
+2025-01-20 17:34:00.025 | INFO     | schedule: Starting scheduled execution of weather
+2025-01-20 17:34:18.680 | INFO     | schedule: Completed scheduled execution of weather
