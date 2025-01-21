@@ -79,10 +79,14 @@ class ScriptValidator:
             if not self.package_manager.setup_environment():
                 return False, "Failed to set up test environment"
 
-            # Run tests using Poetry
+            # Run tests using Poetry with PYTHONPATH set to include script directory
+            env = os.environ.copy()
+            env['PYTHONPATH'] = self.script_path  # Add script directory to Python path
+
             test_result = subprocess.run(
                 ['poetry', 'run', 'pytest', 'tests/', '-v'],
                 cwd=self.script_path,
+                env=env,  # Pass the modified environment
                 capture_output=True,
                 text=True
             )
