@@ -3,6 +3,8 @@ import os
 import toml
 from loguru import logger
 from typing import Tuple
+from src.static.package_manager import PackageManager
+import subprocess
 
 class ScriptValidator:
     def __init__(self, project_name: str, script_name: str):
@@ -10,6 +12,7 @@ class ScriptValidator:
         self.script_name = script_name
         self.script_path = f"/opt/scripts-store/{project_name}/{script_name}"
         self.log = logger.bind(log_type="validate", script_name=script_name)
+        self.package_manager = PackageManager(project_name, script_name)
 
     def validate_structure(self) -> Tuple[bool, str]:
         """Validate the basic structure of the script package"""
@@ -67,6 +70,36 @@ class ScriptValidator:
         except Exception as e:
             return False, f"pyproject.toml validation error: {str(e)}"
 
+    def run_tests(self) -> Tuple[bool, str]:
+        """Run unit tests"""
+        try:
+            self.log.info("Running tests")
+
+            # Use PackageManager to set up environment
+            if not self.package_manager.setup_environment():
+                return False, "Failed to set up test environment"
+
+            # Run tests using Poetry
+            test_result = subprocess.run(
+                ['poetry', 'run', 'pytest', 'tests/', '-v'],
+                cwd=self.script_path,
+                capture_output=True,
+                text=True
+            )
+
+            if test_result.returncode != 0:
+                self.log.error(f"Tests failed:\n{test_result.stdout}\n{test_result.stderr}")
+                self.package_manager.cleanup_environment()
+                return False, f"Tests failed:\n{test_result.stdout}\n{test_result.stderr}"
+            
+            self.log.info(f"All tests passed:\n{test_result.stdout}")
+            return True, f"All tests passed:\n{test_result.stdout}"
+            
+        except Exception as e:
+            self.log.error(f"Test execution error: {str(e)}")
+            self.package_manager.cleanup_environment()
+            return False, f"Test execution error: {str(e)}"
+
     def validate_all(self) -> Tuple[bool, str]:
         """Run all validations"""
         # Check structure
@@ -78,5 +111,10 @@ class ScriptValidator:
         pyproject_valid, pyproject_msg = self.validate_pyproject()
         if not pyproject_valid:
             return False, pyproject_msg
+
+        # Run tests
+        tests_passed, test_msg = self.run_tests()
+        if not tests_passed:
+            return False, test_msg
 
         return True, "All validations passed successfully"
