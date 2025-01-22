@@ -182,50 +182,92 @@ async def github_webhook(request: Request, db: Session = Depends(get_db)):
 @router.post("/scripts/register")
 async def register_script(script_info: ScriptRegistration, db: Session = Depends(get_db)):
     """Register or update a script from GitHub"""
+    log = logger.bind(log_type="github")
+    
     try:
-        script = db.query(Script).filter(
+        script_path = f"/opt/scripts-store/{script_info.project_name}/{script_info.script_name}"
+        
+        # Handle existing script cleanup
+        existing_script = db.query(Script).filter(
             Script.script_name == script_info.script_name,
             Script.project_name == script_info.project_name,
             Script.is_active == True
         ).first()
-        
-        if script:
-            # Update existing script
-            old_version = script.version.split('.')
-            script.version = f"{old_version[0]}.{old_version[1]}.{int(old_version[2]) + 1}"
-            script.commit_sha = script_info.commit_sha
-            script.repository = script_info.repository
-            script.branch = script_info.branch
-        else:
-            # Create new script
-            script = Script(
-                script_name=script_info.script_name,
-                project_name=script_info.project_name,
-                version="1.0.0",
-                repository=script_info.repository,
-                branch=script_info.branch,
-                commit_sha=script_info.commit_sha,
-                is_active=True
-            )
-            db.add(script)
 
+        if existing_script:
+            log.info(f"Found existing script version: {existing_script.version}")
+            # Clean up old environment
+            old_package_manager = PackageManager(script_info.project_name, script_info.script_name)
+            old_package_manager.cleanup_environment()
+
+        # Validate script
+        validator = ScriptValidator(script_info.project_name, script_info.script_name)
+        is_valid, message = validator.validate_all()
+        
+        if not is_valid:
+            raise HTTPException(status_code=400, detail=f"Validation failed: {message}")
+        
+        log.info(f"Script validation passed for {script_info.script_name}")
+
+        # Handle versioning
+        new_version = "1.0.0"
+        if existing_script:
+            version_parts = existing_script.version.split('.')
+            new_version = f"{version_parts[0]}.{version_parts[1]}.{int(version_parts[2]) + 1}"
+            existing_script.is_active = False
+            db.add(existing_script)
+            log.info(f"Deactivated old version, new version will be {new_version}")
+
+        # Create new script record
+        new_script = Script(
+            script_name=script_info.script_name,
+            project_name=script_info.project_name,
+            version=new_version,
+            repository=script_info.repository,
+            branch=script_info.branch,
+            commit_sha=script_info.commit_sha,
+            is_active=True,
+            created_at=datetime.utcnow()
+        )
+
+        # Setup environment for new script
+        package_manager = PackageManager(script_info.project_name, script_info.script_name)
+        if not package_manager.setup_environment():
+            raise HTTPException(
+                status_code=500,
+                detail="Failed to setup Python environment for script"
+            )
+        log.info(f"Environment setup completed for {script_info.script_name}")
+
+        # Handle cron scheduling
         if script_info.cron_expression:
             if not croniter.is_valid(script_info.cron_expression):
                 raise HTTPException(status_code=400, detail="Invalid cron expression")
-            script.cron_expression = script_info.cron_expression
+            new_script.cron_expression = script_info.cron_expression
             scheduler.schedule_script(
-                script.script_name,
-                script.project_name,
-                script.cron_expression
+                script_info.script_name,
+                script_info.project_name,
+                script_info.cron_expression
             )
+            log.info(f"Script scheduled with cron: {script_info.cron_expression}")
 
+        db.add(new_script)
         db.commit()
 
+        log.info(f"Script registered successfully: {script_info.script_name} v{new_version}")
         return {
             "status": "success",
-            "message": f"Script registered successfully with version {script.version}"
+            "message": f"Script registered successfully with version {new_version}",
+            "version": new_version,
+            "project_name": script_info.project_name,
+            "script_name": script_info.script_name
         }
 
+    except HTTPException:
+        raise
+    except Exception as e:
+        log.error(f"Registration error: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
     except HTTPException:
         raise
     except Exception as e:
