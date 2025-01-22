@@ -29,14 +29,11 @@ RUN apt-get update && apt-get install -y \
     supervisor \
     && rm -rf /var/lib/apt/lists/*
 
-# Create all necessary directories
 RUN mkdir -p /root/.poetry \
     && mkdir -p /root/.cache/pypoetry \
     && mkdir -p /root/.cache/pypoetry/virtualenvs \
     && mkdir -p /opt/scripts-store \
-    && mkdir -p /opt/logs/scheduler \
-    && mkdir -p /opt/logs/executor \
-    && mkdir -p /opt/logs/scripts-store-logs \
+    && mkdir -p /opt/logs \
     && mkdir -p /actions-runner \
     && chmod -R 777 /opt/logs \
     && chmod -R 777 /opt/scripts-store \
