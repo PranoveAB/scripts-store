@@ -17,7 +17,7 @@ ENV PYTHONFAULTHANDLER=1 \
     POETRY_VIRTUALENVS_PATH="/root/.cache/pypoetry/virtualenvs" \
     POETRY_VIRTUALENVS_CREATE=true \
     PATH="/root/.poetry/bin:/root/.local/bin:$PATH" \
-    RUNNER_VERSION=2.311.0 \
+    RUNNER_VERSION=2.321.0 \
     RUNNER_ALLOW_RUNASROOT=1
 
 # Install system dependencies
