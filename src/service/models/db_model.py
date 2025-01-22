@@ -35,6 +35,9 @@ class Script(Base):
     run_count = Column(Integer, default=0)
     cron_expression = Column(String, nullable=True)
     params = Column(Text, nullable=True)
+    repository = Column(String, nullable=True)  # GitHub repository URL
+    branch = Column(String, nullable=True, default="main")
+    commit_sha = Column(String, nullable=True)  # Last processed commit SHA
 
     def __repr__(self):
         return f"<Script {self.script_name}:{self.version} ({self.project_name})>"

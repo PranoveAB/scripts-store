@@ -1,8 +1,0 @@
-2025-01-21 00:59:19.952 | INFO     | schedule: Restored 0 scheduled jobs
-2025-01-21 00:59:19.948 | INFO     | schedule: Scheduler started
-2025-01-21 01:00:30.168 | INFO     | schedule: Scheduling weather with cron: * * * * *
-2025-01-21 01:00:30.184 | INFO     | schedule: Successfully scheduled weather
-2025-01-21 01:01:00.020 | INFO     | schedule: Starting scheduled execution of weather
-2025-01-21 01:01:03.781 | INFO     | schedule: Completed scheduled execution of weather
-2025-01-21 01:02:00.003 | INFO     | schedule: Starting scheduled execution of weather
-2025-01-21 01:02:03.652 | INFO     | schedule: Completed scheduled execution of weather

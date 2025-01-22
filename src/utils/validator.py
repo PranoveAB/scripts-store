@@ -17,7 +17,6 @@ class ScriptValidator:
     def validate_structure(self) -> Tuple[bool, str]:
         """Validate the basic structure of the script package"""
         try:
-
             # Check required directories
             required_dirs = ['config', 'tests']
             for dir_name in required_dirs:

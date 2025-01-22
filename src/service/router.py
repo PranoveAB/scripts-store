@@ -1,8 +1,9 @@
 # src/service/router.py
-from fastapi import APIRouter, UploadFile, File, Form, HTTPException, Depends
+from fastapi import APIRouter, UploadFile, File, Form, HTTPException, Depends, Request
 from sqlalchemy.orm import Session
 from src.database.db import get_db
 from src.service.models.db_model import Script
+from src.service.models.schemas import ScriptRegistration
 from src.static.executor import ScriptExecutor
 from src.static.scheduler import scheduler
 from src.static.package_manager import PackageManager
@@ -13,8 +14,23 @@ import zipfile
 from loguru import logger
 import shutil
 from croniter import croniter
+import hmac
+import hashlib
 
 router = APIRouter()
+
+def verify_github_signature(payload: bytes, signature: str) -> bool:
+    """Verify GitHub webhook signature"""
+    if not signature or not os.getenv('GITHUB_WEBHOOK_SECRET'):
+        return False
+    
+    expected = 'sha256=' + hmac.new(
+        os.getenv('GITHUB_WEBHOOK_SECRET').encode(),
+        payload,
+        hashlib.sha256
+    ).hexdigest()
+    
+    return hmac.compare_digest(signature, expected)
 
 @router.post("/scripts/upload")
 async def upload_script(
@@ -43,7 +59,7 @@ async def upload_script(
         zip_path = os.path.join(project_dir, file.filename)
         extract_dir = os.path.join(project_dir, script_name)
         
-        # Handle existing version cleanup before extraction
+        # Handle existing version cleanup
         existing_script = db.query(Script).filter(
             Script.project_name == project_name,
             Script.script_name == script_name,
@@ -51,53 +67,38 @@ async def upload_script(
         ).first()
 
         if existing_script:
-            # Clean up old version's environment
             old_package_manager = PackageManager(project_name, script_name)
             old_package_manager.cleanup_environment()
-            logger.bind(log_type="execute").info(f"Cleaned up old version of {script_name} in {project_name}")
-
-        # Clean up existing directory if it exists
+            
+        # Clean up existing directory
         if os.path.exists(extract_dir):
             shutil.rmtree(extract_dir)
         
-        # Save zip file
+        # Save and extract zip
         with open(zip_path, "wb") as buffer:
             shutil.copyfileobj(file.file, buffer)
         
-        # Extract zip
         with zipfile.ZipFile(zip_path, 'r') as zip_ref:
             zip_ref.extractall(extract_dir)
-        logger.bind(log_type="execute").info(f"Extracted {file.filename} to {extract_dir}")
         
-        # Remove zip file after extraction
         os.remove(zip_path)
 
-        logger.bind(log_type="execute").info(f"Validating {script_name} in {project_name}")
         # Validate script
         validator = ScriptValidator(project_name, script_name)
         is_valid, message = validator.validate_all()
         
         if not is_valid:
-            if extract_dir and os.path.exists(extract_dir):
+            if os.path.exists(extract_dir):
                 shutil.rmtree(extract_dir)
-            raise HTTPException(
-                status_code=400,
-                detail=f"Validation failed: {message}"
-            )
+            raise HTTPException(status_code=400, detail=f"Validation failed: {message}")
 
         # Handle versioning
+        new_version = "1.0.0"
         if existing_script:
-            # Increment version
-            logger.bind(log_type="execute").info(f"Found existing version of {script_name} in {project_name}, incrementing version")
             version_parts = existing_script.version.split('.')
             new_version = f"{version_parts[0]}.{version_parts[1]}.{int(version_parts[2]) + 1}"
-            
-            # Deactivate old version
             existing_script.is_active = False
             db.add(existing_script)
-            logger.bind(log_type="execute").info(f"Deactivated old version of {script_name} in {project_name}, new version is {new_version}")
-        else:
-            new_version = "1.0.0"
 
         # Create new script record
         new_script = Script(
@@ -107,38 +108,128 @@ async def upload_script(
             is_active=True,
             created_at=datetime.utcnow()
         )
-        logger.bind(log_type="execute").info(f"Created record for {script_name} in {project_name}")
 
-        # Add cron expression if provided
         if cron_expression:
-            logger.bind(log_type="execute").info(f"Found cron expression: {cron_expression}, validating")
             if not croniter.is_valid(cron_expression):
                 raise HTTPException(status_code=400, detail="Invalid cron expression")
             new_script.cron_expression = cron_expression
-            logger.bind(log_type="execute").info(f"Validated cron expression: {cron_expression}")
 
         db.add(new_script)
         db.commit()
 
-        # Schedule the script if cron expression provided
         if cron_expression:
             scheduler.schedule_script(script_name, project_name, cron_expression)
-            logger.bind(log_type="execute").info(f"Script scheduled with cron expression: {cron_expression}")
 
-        logger.bind(log_type="execute").info(f"Script uploaded successfully: {script_name} in {project_name}")
         return {
             "status": "success",
-            "message": f"Script uploaded successfully",
+            "message": "Script uploaded successfully",
             "version": new_version
         }
 
     except HTTPException:
         raise
     except Exception as e:
-        # Clean up on error
         if extract_dir and os.path.exists(extract_dir):
             shutil.rmtree(extract_dir)
         logger.bind(log_type="execute").error(f"Error uploading script: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/webhook/github")
+async def github_webhook(request: Request, db: Session = Depends(get_db)):
+    """Handle GitHub webhook events"""
+    try:
+        # Verify webhook signature
+        signature = request.headers.get('X-Hub-Signature-256')
+        payload = await request.body()
+        if not verify_github_signature(payload, signature):
+            raise HTTPException(status_code=401, detail="Invalid signature")
+
+        data = await request.json()
+        
+        # Only process push events
+        if data.get('ref', '').startswith('refs/heads/'):
+            branch = data['ref'].split('/')[-1]
+            repo_url = data['repository']['clone_url']
+            commit_sha = data['after']
+
+            # Find affected scripts
+            scripts = db.query(Script).filter(
+                Script.repository == repo_url,
+                Script.branch == branch,
+                Script.is_active == True
+            ).all()
+
+            processed_scripts = []
+            for script in scripts:
+                script.commit_sha = commit_sha
+                processed_scripts.append(script.script_name)
+
+            db.commit()
+
+            return {
+                "status": "success",
+                "message": f"Processed scripts: {', '.join(processed_scripts)}"
+            }
+        
+        return {"status": "ignored", "message": "Not a push event"}
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.bind(log_type="github").error(f"Webhook error: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.post("/scripts/register")
+async def register_script(script_info: ScriptRegistration, db: Session = Depends(get_db)):
+    """Register or update a script from GitHub"""
+    try:
+        script = db.query(Script).filter(
+            Script.script_name == script_info.script_name,
+            Script.project_name == script_info.project_name,
+            Script.is_active == True
+        ).first()
+        
+        if script:
+            # Update existing script
+            old_version = script.version.split('.')
+            script.version = f"{old_version[0]}.{old_version[1]}.{int(old_version[2]) + 1}"
+            script.commit_sha = script_info.commit_sha
+            script.repository = script_info.repository
+            script.branch = script_info.branch
+        else:
+            # Create new script
+            script = Script(
+                script_name=script_info.script_name,
+                project_name=script_info.project_name,
+                version="1.0.0",
+                repository=script_info.repository,
+                branch=script_info.branch,
+                commit_sha=script_info.commit_sha,
+                is_active=True
+            )
+            db.add(script)
+
+        if script_info.cron_expression:
+            if not croniter.is_valid(script_info.cron_expression):
+                raise HTTPException(status_code=400, detail="Invalid cron expression")
+            script.cron_expression = script_info.cron_expression
+            scheduler.schedule_script(
+                script.script_name,
+                script.project_name,
+                script.cron_expression
+            )
+
+        db.commit()
+
+        return {
+            "status": "success",
+            "message": f"Script registered successfully with version {script.version}"
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.bind(log_type="github").error(f"Registration error: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/scripts/{script_name}/run")
@@ -150,7 +241,6 @@ async def run_script(
 ):
     """Run a script immediately"""
     try:
-        # Verify script exists and is active
         script = db.query(Script).filter(
             Script.script_name == script_name,
             Script.project_name == project_name,
@@ -160,13 +250,8 @@ async def run_script(
         if not script:
             raise HTTPException(status_code=404, detail="Script not found or not active")
 
-        # Create executor and run script
         executor = ScriptExecutor(script_name, project_name)
-        try:
-            result = executor.execute(params)
-            return result
-        except Exception as e:
-            raise e
+        return await executor.execute(params)
 
     except HTTPException:
         raise
@@ -183,11 +268,9 @@ async def schedule_script_endpoint(
 ):
     """Schedule a script with cron expression"""
     try:
-        # Validate cron expression
         if not croniter.is_valid(cron_expression):
             raise HTTPException(status_code=400, detail="Invalid cron expression")
         
-        # Verify script exists and is active
         script = db.query(Script).filter(
             Script.script_name == script_name,
             Script.project_name == project_name,
@@ -197,11 +280,9 @@ async def schedule_script_endpoint(
         if not script:
             raise HTTPException(status_code=404, detail="Script not found or not active")
         
-        # Update script with cron expression
         script.cron_expression = cron_expression
         db.commit()
         
-        # Schedule the script
         scheduler.schedule_script(script_name, project_name, cron_expression)
         
         return {
@@ -244,5 +325,8 @@ async def get_script_status(
         "last_run": script.last_run,
         "last_status": script.last_status,
         "run_count": script.run_count,
-        "cron_expression": script.cron_expression
+        "cron_expression": script.cron_expression,
+        "repository": script.repository,
+        "branch": script.branch,
+        "commit_sha": script.commit_sha
     }

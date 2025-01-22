@@ -1,7 +1,3 @@
-# Ignore everything in scripts-store and logs
-scripts-store/*
-logs/*
-
-# If you want to keep the folders themselves in git but not their contents
-!scripts-store/.gitkeep
-!logs/.gitkeep
+.env
+/opt/scripts-store/*
+/opt/logs/*

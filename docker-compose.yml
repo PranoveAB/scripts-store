@@ -1,13 +1,24 @@
-# docker-compose.yml
-
 services:
-  script-store:
+  script-runner:
     build: .
+    environment:
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - GITHUB_ACCOUNT=${GITHUB_ACCOUNT}
+      - RUNNER_NAME=script-service-runner-${COMPOSE_PROJECT_NAME:-scripts}
+      - GITHUB_WEBHOOK_SECRET=${GITHUB_WEBHOOK_SECRET}
+    volumes:
+      - scripts-store:/opt/scripts-store
+      - logs:/opt/logs
+      - poetry-cache:/root/.cache/pypoetry
     ports:
       - "8000:8000"
-    volumes:
-      - ./scripts-store:/opt/scripts-store
-      - ./logs:/opt/logs
-    environment:
-      - PYTHONPATH=/opt
     restart: unless-stopped
+    hostname: script-runner
+
+volumes:
+  scripts-store:
+    name: scripts-store
+  logs:
+    name: script-service-logs
+  poetry-cache:
+    name: poetry-cache
