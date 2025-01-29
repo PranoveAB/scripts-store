@@ -8,6 +8,9 @@ services:
     volumes:
       - ./scripts-store:/opt/scripts-store
       - ./logs:/opt/logs
+      - ./data:/opt/data
+    env_file:
+      - .env
     environment:
       - PYTHONPATH=/opt
     restart: unless-stopped

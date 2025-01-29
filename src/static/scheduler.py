@@ -28,7 +28,7 @@ class ScriptScheduler:
     def __init__(self):
         # Initialize scheduler with SQLite job store for persistence
         self.scheduler = BackgroundScheduler()
-        self.scheduler.add_jobstore('sqlalchemy', url='sqlite:///jobs.sqlite')
+        self.scheduler.add_jobstore('sqlalchemy', url='sqlite:////opt/data/jobs.sqlite')  # Absolute path
         self.log = logger.bind(log_type="schedule")
 
     def start(self):

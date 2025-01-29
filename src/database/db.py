@@ -4,7 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 # SQLite database URL
-SQLALCHEMY_DATABASE_URL = "sqlite:///./scripts.db"
+SQLALCHEMY_DATABASE_URL = "sqlite:////opt/data/scripts.db"  # Absolute path
 
 # Create SQLAlchemy engine
 engine = create_engine(

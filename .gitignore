@@ -1,3 +1,4 @@
+.env
 # Ignore everything in scripts-store and logs
 scripts-store/*
 logs/*

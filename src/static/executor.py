@@ -2,9 +2,9 @@
 from datetime import datetime
 import os
 from loguru import logger
-from src.static.package_manager import PackageManager
 from src.database.db import SessionLocal
 from src.service.models.db_model import Script
+from src.static.package_manager import PackageManager
 
 class ScriptExecutor:
     def __init__(self, script_name: str, project_name: str):
@@ -30,11 +30,11 @@ class ScriptExecutor:
             if not os.path.exists(main_script):
                 raise Exception(f"Main script not found at {main_script}")
             
-            # Set up environment if needed
+            # Set up environment
             if not self.package_manager.setup_environment():
                 raise Exception("Failed to set up Python environment")
             
-            # Run the script
+            # Run the script in its environment
             success, output, error = self.package_manager.run_in_environment(
                 main_script,
                 params
@@ -43,7 +43,6 @@ class ScriptExecutor:
             # Update script status in database
             self._update_script_status(success)
             
-            # Log output/error
             if success:
                 self.log.info(f"Script output:\n{output}")
             else:

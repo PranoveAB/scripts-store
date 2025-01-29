@@ -1,25 +1,20 @@
-2025-01-21 00:59:56.187 | INFO     | execute: Extracted weather-app.zip to /opt/scripts-store/weather-python/weather
-2025-01-21 00:59:56.188 | INFO     | execute: Validating weather in weather-python
-2025-01-21 00:59:56.188 | INFO     | execute: Required directories exist for weather-python/weather
-2025-01-21 00:59:56.188 | INFO     | execute: Required files exist for weather-python/weather
-2025-01-21 00:59:56.188 | INFO     | execute: Structure validation passed for weather-python/weather
-2025-01-21 00:59:56.758 | INFO     | execute: Poetry virtualenvs.path set to /root/.cache/pypoetry/virtualenvs
-2025-01-21 00:59:57.387 | INFO     | execute: No poetry.lock file found, installing dependencies
-2025-01-21 01:00:25.040 | INFO     | execute: Poetry install output: Updating dependencies
+2025-01-29 19:19:30.440 | INFO     | execute: Extracted weather-app.zip to /opt/scripts-store/weather-python/weather
+2025-01-29 19:19:30.446 | INFO     | execute: Validating weather in weather-python
+2025-01-29 19:19:30.447 | INFO     | execute: Required directories exist for weather-python/weather
+2025-01-29 19:19:30.448 | INFO     | execute: Required files exist for weather-python/weather
+2025-01-29 19:19:30.448 | INFO     | execute: Structure validation passed for weather-python/weather
+2025-01-29 19:21:37.024 | INFO     | execute: Poetry install output: Updating dependencies
 Resolving dependencies...
 
-Package operations: 26 installs, 0 updates, 0 removals
+Package operations: 21 installs, 0 updates, 0 removals
 
   • Installing numpy (2.0.2)
-  • Installing six (1.17.0)
   • Installing zipp (3.21.0)
   • Installing certifi (2024.12.14)
   • Installing charset-normalizer (3.4.1)
   • Installing contourpy (1.3.0)
   • Installing cycler (0.12.1)
-  • Installing exceptiongroup (1.2.2)
-  • Installing fonttools (4.55.3)
-  • Installing idna (3.10)
+  • Installing fonttools (4.55.8)
   • Installing importlib-resources (6.5.2)
   • Installing iniconfig (2.0.0)
   • Installing kiwisolver (1.4.7)
@@ -27,10 +22,8 @@ Package operations: 26 installs, 0 updates, 0 removals
   • Installing pillow (11.1.0)
   • Installing pluggy (1.5.0)
   • Installing pyparsing (3.2.1)
-  • Installing python-dateutil (2.9.0.post0)
-  • Installing pytz (2024.2)
   • Installing tomli (2.2.1)
-  • Installing tzdata (2024.2)
+  • Installing tzdata (2025.1)
   • Installing urllib3 (2.3.0)
   • Installing matplotlib (3.9.4)
   • Installing pandas (2.2.3)
@@ -39,34 +32,204 @@ Package operations: 26 installs, 0 updates, 0 removals
 
 Writing lock file
 
-2025-01-21 01:00:30.134 | INFO     | execute: Created record for weather in weather-python
-2025-01-21 01:00:30.134 | INFO     | execute: Found cron expression: * * * * *, validating
-2025-01-21 01:00:30.140 | INFO     | execute: Validated cron expression: * * * * *
-2025-01-21 01:00:30.186 | INFO     | execute: Script scheduled with cron expression: * * * * *
-2025-01-21 01:00:30.186 | INFO     | execute: Script uploaded successfully: weather in weather-python
-2025-01-21 01:01:00.027 | INFO     | execute: Executing script weather from project weather-python
-2025-01-21 01:01:00.027 | INFO     | execute: Main script path: /opt/scripts-store/weather-python/weather/main.py
-2025-01-21 01:01:00.560 | INFO     | execute: Poetry virtualenvs.path set to /root/.cache/pypoetry/virtualenvs
-2025-01-21 01:01:01.112 | INFO     | execute: Using existing environment: weather-python-F6vSbGNj-py3.9
-2025-01-21 01:01:03.780 | INFO     | execute: Updated script status: success
-2025-01-21 01:01:03.781 | INFO     | execute: Script output:
+2025-01-29 19:21:39.876 | INFO     | execute: Poetry environment info:
+
+Virtualenv
+Python:         3.9.21
+Implementation: CPython
+Path:           /opt/.cache/pypoetry/virtualenvs/caf-01-scripts-y8366zdl-py3.9
+Executable:     /opt/.cache/pypoetry/virtualenvs/caf-01-scripts-y8366zdl-py3.9/bin/python
+Valid:          True
+
+System
+Platform:   linux
+OS:         posix
+Python:     3.9.21
+Path:       /usr/local
+Executable: /usr/local/bin/python3.9
+
+2025-01-29 19:21:47.805 | INFO     | execute: Created record for weather in weather-python
+2025-01-29 19:21:47.805 | INFO     | execute: Found cron expression: * * * * *, validating
+2025-01-29 19:21:47.839 | INFO     | execute: Validated cron expression: * * * * *
+2025-01-29 19:21:48.145 | INFO     | execute: Script scheduled with cron expression: * * * * *
+2025-01-29 19:21:48.151 | INFO     | execute: Script uploaded successfully: weather in weather-python
+2025-01-29 19:22:00.092 | INFO     | execute: Executing script weather from project weather-python
+2025-01-29 19:22:00.104 | INFO     | execute: Main script path: /opt/scripts-store/weather-python/weather/main.py
+2025-01-29 19:22:06.795 | INFO     | execute: Poetry install output: Installing dependencies from lock file
+
+No dependencies to install or update
+
+2025-01-29 19:22:08.945 | INFO     | execute: Poetry environment info:
+
+Virtualenv
+Python:         3.9.21
+Implementation: CPython
+Path:           /opt/.cache/pypoetry/virtualenvs/caf-01-scripts-y8366zdl-py3.9
+Executable:     /opt/.cache/pypoetry/virtualenvs/caf-01-scripts-y8366zdl-py3.9/bin/python
+Valid:          True
+
+System
+Platform:   linux
+OS:         posix
+Python:     3.9.21
+Path:       /usr/local
+Executable: /usr/local/bin/python3.9
+
+2025-01-29 19:22:16.422 | INFO     | execute: Updated script status: success
+2025-01-29 19:22:16.424 | INFO     | execute: Script output:
 Weather Tracker Starting...
 This script uses matplotlib and pandas - different from signal project!
 Getting weather for Nairobi...
+Nairobi: +24 °C, Partly cloudy
 Getting weather for New York...
+New York: +7 °C, Partly cloudy
 Getting weather for Tokyo...
+Tokyo: +9 °C, Clear
+Creating weather plot...
+Plot saved as output/weather_plot.png
 Weather Tracker Completed!
 
-2025-01-21 01:02:00.004 | INFO     | execute: Executing script weather from project weather-python
-2025-01-21 01:02:00.004 | INFO     | execute: Main script path: /opt/scripts-store/weather-python/weather/main.py
-2025-01-21 01:02:00.553 | INFO     | execute: Poetry virtualenvs.path set to /root/.cache/pypoetry/virtualenvs
-2025-01-21 01:02:01.105 | INFO     | execute: Using existing environment: weather-python-F6vSbGNj-py3.9
-2025-01-21 01:02:03.651 | INFO     | execute: Updated script status: success
-2025-01-21 01:02:03.652 | INFO     | execute: Script output:
+2025-01-29 19:23:00.128 | INFO     | execute: Executing script weather from project weather-python
+2025-01-29 19:23:00.129 | INFO     | execute: Main script path: /opt/scripts-store/weather-python/weather/main.py
+2025-01-29 19:23:11.827 | INFO     | execute: Poetry install output: Installing dependencies from lock file
+
+No dependencies to install or update
+
+2025-01-29 19:23:16.508 | INFO     | execute: Poetry environment info:
+
+Virtualenv
+Python:         3.9.21
+Implementation: CPython
+Path:           /opt/.cache/pypoetry/virtualenvs/caf-01-scripts-y8366zdl-py3.9
+Executable:     /opt/.cache/pypoetry/virtualenvs/caf-01-scripts-y8366zdl-py3.9/bin/python
+Valid:          True
+
+System
+Platform:   linux
+OS:         posix
+Python:     3.9.21
+Path:       /usr/local
+Executable: /usr/local/bin/python3.9
+
+2025-01-29 19:23:24.557 | INFO     | execute: Updated script status: success
+2025-01-29 19:23:24.559 | INFO     | execute: Script output:
 Weather Tracker Starting...
 This script uses matplotlib and pandas - different from signal project!
 Getting weather for Nairobi...
+Nairobi: +24 °C, Partly cloudy
 Getting weather for New York...
+New York: +7 °C, Partly cloudy
 Getting weather for Tokyo...
+Tokyo: +9 °C, Clear
+Creating weather plot...
+Plot saved as output/weather_plot.png
+Weather Tracker Completed!
+
+2025-01-29 19:24:00.268 | INFO     | execute: Executing script weather from project weather-python
+2025-01-29 19:24:00.270 | INFO     | execute: Main script path: /opt/scripts-store/weather-python/weather/main.py
+2025-01-29 19:24:09.154 | INFO     | execute: Poetry install output: Installing dependencies from lock file
+
+No dependencies to install or update
+
+2025-01-29 19:24:11.089 | INFO     | execute: Poetry environment info:
+
+Virtualenv
+Python:         3.9.21
+Implementation: CPython
+Path:           /opt/.cache/pypoetry/virtualenvs/caf-01-scripts-y8366zdl-py3.9
+Executable:     /opt/.cache/pypoetry/virtualenvs/caf-01-scripts-y8366zdl-py3.9/bin/python
+Valid:          True
+
+System
+Platform:   linux
+OS:         posix
+Python:     3.9.21
+Path:       /usr/local
+Executable: /usr/local/bin/python3.9
+
+2025-01-29 19:24:18.451 | INFO     | execute: Updated script status: success
+2025-01-29 19:24:18.454 | INFO     | execute: Script output:
+Weather Tracker Starting...
+This script uses matplotlib and pandas - different from signal project!
+Getting weather for Nairobi...
+Nairobi: +24 °C, Partly cloudy
+Getting weather for New York...
+New York: +7 °C, Partly cloudy
+Getting weather for Tokyo...
+Tokyo: +9 °C, Clear
+Creating weather plot...
+Plot saved as output/weather_plot.png
+Weather Tracker Completed!
+
+2025-01-29 19:25:01.158 | INFO     | execute: Executing script weather from project weather-python
+2025-01-29 19:25:01.176 | INFO     | execute: Main script path: /opt/scripts-store/weather-python/weather/main.py
+2025-01-29 19:25:11.522 | INFO     | execute: Poetry install output: Installing dependencies from lock file
+
+No dependencies to install or update
+
+2025-01-29 19:25:14.095 | INFO     | execute: Poetry environment info:
+
+Virtualenv
+Python:         3.9.21
+Implementation: CPython
+Path:           /opt/.cache/pypoetry/virtualenvs/caf-01-scripts-y8366zdl-py3.9
+Executable:     /opt/.cache/pypoetry/virtualenvs/caf-01-scripts-y8366zdl-py3.9/bin/python
+Valid:          True
+
+System
+Platform:   linux
+OS:         posix
+Python:     3.9.21
+Path:       /usr/local
+Executable: /usr/local/bin/python3.9
+
+2025-01-29 19:25:20.463 | INFO     | execute: Updated script status: success
+2025-01-29 19:25:20.465 | INFO     | execute: Script output:
+Weather Tracker Starting...
+This script uses matplotlib and pandas - different from signal project!
+Getting weather for Nairobi...
+Nairobi: +24 °C, Partly cloudy
+Getting weather for New York...
+New York: +7 °C, Partly cloudy
+Getting weather for Tokyo...
+Tokyo: +9 °C, Clear
+Creating weather plot...
+Plot saved as output/weather_plot.png
+Weather Tracker Completed!
+
+2025-01-29 19:26:00.183 | INFO     | execute: Executing script weather from project weather-python
+2025-01-29 19:26:00.186 | INFO     | execute: Main script path: /opt/scripts-store/weather-python/weather/main.py
+2025-01-29 19:26:13.120 | INFO     | execute: Poetry install output: Installing dependencies from lock file
+
+No dependencies to install or update
+
+2025-01-29 19:26:16.197 | INFO     | execute: Poetry environment info:
+
+Virtualenv
+Python:         3.9.21
+Implementation: CPython
+Path:           /opt/.cache/pypoetry/virtualenvs/caf-01-scripts-y8366zdl-py3.9
+Executable:     /opt/.cache/pypoetry/virtualenvs/caf-01-scripts-y8366zdl-py3.9/bin/python
+Valid:          True
+
+System
+Platform:   linux
+OS:         posix
+Python:     3.9.21
+Path:       /usr/local
+Executable: /usr/local/bin/python3.9
+
+2025-01-29 19:26:24.338 | INFO     | execute: Updated script status: success
+2025-01-29 19:26:24.341 | INFO     | execute: Script output:
+Weather Tracker Starting...
+This script uses matplotlib and pandas - different from signal project!
+Getting weather for Nairobi...
+Nairobi: +24 °C, Partly cloudy
+Getting weather for New York...
+New York: +7 °C, Partly cloudy
+Getting weather for Tokyo...
+Tokyo: +9 °C, Clear
+Creating weather plot...
+Plot saved as output/weather_plot.png
 Weather Tracker Completed!
 
