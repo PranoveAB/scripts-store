@@ -7,6 +7,7 @@ from src.static.executor import ScriptExecutor
 from src.static.scheduler import scheduler
 from src.static.package_manager import PackageManager
 from src.utils.validator import ScriptValidator
+from src.service.models.register_model import ScriptRegistration
 from datetime import datetime
 import os
 import zipfile
@@ -15,6 +16,110 @@ import shutil
 from croniter import croniter
 
 router = APIRouter()
+
+@router.post("/scripts/register")
+async def register_script(
+    registration: ScriptRegistration,
+    db: Session = Depends(get_db)
+):
+    """Register a script deployed by GitHub Actions"""
+    log = logger.bind(
+        log_type="execute",
+        script_name=registration.script_name,
+        project_name=registration.project_name
+    )
+    
+    try:
+        script_path = f"/opt/scripts-store/{registration.project_name}/{registration.script_name}"
+        
+        # Verify script directory exists
+        if not os.path.exists(script_path):
+            raise HTTPException(
+                status_code=400,
+                detail="Script directory not found. Ensure copy step completed successfully."
+            )
+            
+        # Validate script
+        log.info(f"Validating script at {script_path}")
+        validator = ScriptValidator(registration.project_name, registration.script_name)
+        is_valid, message = validator.validate_all()
+        
+        if not is_valid:
+            raise HTTPException(
+                status_code=400,
+                detail=f"Validation failed: {message}"
+            )
+
+        # Handle existing script version
+        existing_script = db.query(Script).filter(
+            Script.project_name == registration.project_name,
+            Script.script_name == registration.script_name,
+            Script.is_active == True
+        ).first()
+
+        if existing_script:
+            # Clean up old version's environment
+            old_package_manager = PackageManager(registration.project_name, registration.script_name)
+            old_package_manager.cleanup_environment()
+            log.info(f"Cleaned up old version environment")
+            
+            # Increment version
+            version_parts = existing_script.version.split('.')
+            new_version = f"{version_parts[0]}.{version_parts[1]}.{int(version_parts[2]) + 1}"
+            
+            # Deactivate old version
+            existing_script.is_active = False
+            db.add(existing_script)
+            log.info(f"Deactivated old version {existing_script.version}")
+        else:
+            new_version = "1.0.0"
+
+        # Validate cron expression if provided
+        if registration.cron_expression:
+            if not croniter.is_valid(registration.cron_expression):
+                raise HTTPException(
+                    status_code=400,
+                    detail="Invalid cron expression"
+                )
+            log.info(f"Validated cron expression: {registration.cron_expression}")
+
+        # Create new script record
+        new_script = Script(
+            script_name=registration.script_name,
+            project_name=registration.project_name,
+            version=new_version,
+            is_active=True,
+            created_at=datetime.utcnow(),
+            cron_expression=registration.cron_expression
+        )
+
+        db.add(new_script)
+        db.commit()
+        log.info(f"Created new script record with version {new_version}")
+
+        # Schedule the script if cron expression provided
+        if registration.cron_expression:
+            scheduler.schedule_script(
+                registration.script_name,
+                registration.project_name,
+                registration.cron_expression
+            )
+            log.info("Script scheduled successfully")
+
+        return {
+            "status": "success",
+            "message": "Script registered successfully",
+            "version": new_version,
+            "repository": registration.repository,
+            "commit_sha": registration.commit_sha
+        }
+
+    except HTTPException:
+        raise
+    except Exception as e:
+        log.error(f"Error registering script: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 
 @router.post("/scripts/upload")
 async def upload_script(
